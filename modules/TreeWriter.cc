@@ -497,50 +497,53 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
     entry->PID = candidate->PID;
 
     entry->Charge = candidate->Charge;
+    entry->PuppiWeight = candidate->PuppiWeight;
+    entry->IsPU = candidate->IsPU;
+    entry->IsRecoPU = candidate->IsRecoPU;
 
-    entry->EtaOuter = eta;
-    entry->PhiOuter = position.Phi();
+    // entry->EtaOuter = eta;
+    // entry->PhiOuter = position.Phi();
 
-    entry->XOuter = position.X();
-    entry->YOuter = position.Y();
-    entry->ZOuter = position.Z();
-    entry->TOuter = position.T() * 1.0E-3 / c_light;
+    // entry->XOuter = position.X();
+    // entry->YOuter = position.Y();
+    // entry->ZOuter = position.Z();
+    // entry->TOuter = position.T() * 1.0E-3 / c_light;
 
-    entry->L = candidate->L;
+    // entry->L = candidate->L;
 
     entry->D0 = candidate->D0;
     entry->DZ = candidate->DZ;
-    entry->Nclusters = candidate->Nclusters;
-    entry->dNdx = candidate->dNdx;
+    // entry->Nclusters = candidate->Nclusters;
+    // entry->dNdx = candidate->dNdx;
 
-    entry->ErrorP = candidate->ErrorP;
-    entry->ErrorPT = candidate->ErrorPT;
-    entry->ErrorCtgTheta = candidate->ErrorCtgTheta;
+    // entry->ErrorP = candidate->ErrorP;
+    // entry->ErrorPT = candidate->ErrorPT;
+    // entry->ErrorCtgTheta = candidate->ErrorCtgTheta;
 
 
     // diagonal covariance matrix terms
 
     entry->ErrorD0 = candidate->ErrorD0;
-    entry->ErrorC = candidate->ErrorC;
-    entry->ErrorPhi = candidate->ErrorPhi;
+    // entry->ErrorC = candidate->ErrorC;
+    // entry->ErrorPhi = candidate->ErrorPhi;
     entry->ErrorDZ = candidate->ErrorDZ;
-    entry->ErrorCtgTheta = candidate->ErrorCtgTheta;
+    // entry->ErrorCtgTheta = candidate->ErrorCtgTheta;
 
     // add some offdiagonal covariance matrix elements
-    entry->ErrorD0Phi          = candidate->TrackCovariance(0,1);
-    entry->ErrorD0C            = candidate->TrackCovariance(0,2);
-    entry->ErrorD0DZ           = candidate->TrackCovariance(0,3);
-    entry->ErrorD0CtgTheta     = candidate->TrackCovariance(0,4);
-    entry->ErrorPhiC           = candidate->TrackCovariance(1,2);
-    entry->ErrorPhiDZ          = candidate->TrackCovariance(1,3);
-    entry->ErrorPhiCtgTheta    = candidate->TrackCovariance(1,4);
-    entry->ErrorCDZ            = candidate->TrackCovariance(2,3);
-    entry->ErrorCCtgTheta      = candidate->TrackCovariance(2,4);
-    entry->ErrorDZCtgTheta     = candidate->TrackCovariance(3,4);
+    // entry->ErrorD0Phi          = candidate->TrackCovariance(0,1);
+    // entry->ErrorD0C            = candidate->TrackCovariance(0,2);
+    // entry->ErrorD0DZ           = candidate->TrackCovariance(0,3);
+    // entry->ErrorD0CtgTheta     = candidate->TrackCovariance(0,4);
+    // entry->ErrorPhiC           = candidate->TrackCovariance(1,2);
+    // entry->ErrorPhiDZ          = candidate->TrackCovariance(1,3);
+    // entry->ErrorPhiCtgTheta    = candidate->TrackCovariance(1,4);
+    // entry->ErrorCDZ            = candidate->TrackCovariance(2,3);
+    // entry->ErrorCCtgTheta      = candidate->TrackCovariance(2,4);
+    // entry->ErrorDZCtgTheta     = candidate->TrackCovariance(3,4);
 
-    entry->Xd = candidate->Xd;
-    entry->Yd = candidate->Yd;
-    entry->Zd = candidate->Zd;
+    // entry->Xd = candidate->Xd;
+    // entry->Yd = candidate->Yd;
+    // entry->Zd = candidate->Zd;
 
     const TLorentzVector &momentum = candidate->Momentum;
 
@@ -574,10 +577,10 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
 
     entry->Eem = candidate->Eem;
     entry->Ehad = candidate->Ehad;
-    entry->Edges[0] = candidate->Edges[0];
-    entry->Edges[1] = candidate->Edges[1];
-    entry->Edges[2] = candidate->Edges[2];
-    entry->Edges[3] = candidate->Edges[3];
+    // entry->Edges[0] = candidate->Edges[0];
+    // entry->Edges[1] = candidate->Edges[1];
+    // entry->Edges[2] = candidate->Edges[2];
+    // entry->Edges[3] = candidate->Edges[3];
 
     //entry->T = position.T() * 1.0E-3 / c_light;
     entry->NTimeHits = candidate->NTimeHits;

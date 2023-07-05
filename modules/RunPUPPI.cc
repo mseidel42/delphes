@@ -189,7 +189,7 @@ void RunPUPPI::Process()
     curRecoObj.m = momentum.M();
     particle = static_cast<Candidate *>(candidate->GetCandidates()->At(0)); //if(fApplyNoLep && TMath::Abs(candidate->PID) == 11) continue; //Dumb cut to minimize the nolepton on electron
     //if(fApplyNoLep && TMath::Abs(candidate->PID) == 13) continue;
-    if(candidate->IsRecoPU and candidate->Charge != 0)
+    if(candidate->ClusterIndex != 0 and candidate->Charge != 0)
     { // if it comes fromPU vertexes after the resolution smearing and the dZ matching within resolution
       lNBad++;
       curRecoObj.id = 2;
@@ -204,7 +204,7 @@ void RunPUPPI::Process()
         curRecoObj.pfType = 1;
       curRecoObj.dZ = particle->Position.Z() - PVZ;
     }
-    else if(!candidate->IsRecoPU && candidate->Charge != 0)
+    else if(candidate->ClusterIndex == 0 && candidate->Charge != 0)
     {
       curRecoObj.id = 1; // charge from LV
       curRecoObj.vtxId = 1; // from PV
@@ -263,7 +263,7 @@ void RunPUPPI::Process()
   }
   // Create PUPPI container
   fPuppi->initialize(puppiInputVector);
-  fPuppi->puppiWeights();
+  std::vector<double> puppiWeights = fPuppi->puppiWeights();
   std::vector<PseudoJet> puppiParticles = fPuppi->puppiParticles();
 
   // Loop on final particles
@@ -273,6 +273,7 @@ void RunPUPPI::Process()
     {
       candidate = static_cast<Candidate *>(InputParticles.at(it->user_index())->Clone());
       candidate->Momentum.SetPxPyPzE(it->px(), it->py(), it->pz(), it->e());
+      candidate->PuppiWeight = puppiWeights.at(it - puppiParticles.begin());
       fOutputArray->Add(candidate);
       if(puppiInputVector.at(it->user_index()).id == 1 or puppiInputVector.at(it->user_index()).id == 2)
         fOutputTrackArray->Add(candidate);

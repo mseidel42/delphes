@@ -212,7 +212,7 @@ Candidate::Candidate() :
   IsPU(0), IsRecoPU(0), IsConstituent(0), IsFromConversion(0),
   Flavor(0), FlavorAlgo(0), FlavorPhys(0),
   BTag(0), BTagAlgo(0), BTagPhys(0),
-  TauTag(0), TauWeight(0.0), Eem(0.0), Ehad(0.0),
+  TauTag(0), TauWeight(0.0), PuppiWeight(0.0), Eem(0.0), Ehad(0.0),
   DeltaEta(0.0), DeltaPhi(0.0),
   Momentum(0.0, 0.0, 0.0, 0.0),
   Position(0.0, 0.0, 0.0, 0.0),
@@ -375,6 +375,7 @@ void Candidate::Copy(TObject &obj) const
   object.BTagPhys = BTagPhys;
   object.TauTag = TauTag;
   object.TauWeight = TauWeight;
+  object.PuppiWeight = PuppiWeight;
   object.Eem = Eem;
   object.Ehad = Ehad;
   object.Edges[0] = Edges[0];
@@ -509,6 +510,7 @@ void Candidate::Clear(Option_t *option)
   BTagPhys = 0;
   TauTag = 0;
   TauWeight = 0.0;
+  PuppiWeight = 0.0;
   Eem = 0.0;
   Ehad = 0.0;
   Edges[0] = 0.0;
