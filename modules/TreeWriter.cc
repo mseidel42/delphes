@@ -29,6 +29,7 @@
 #include "classes/DelphesClasses.h"
 #include "classes/DelphesFactory.h"
 #include "classes/DelphesFormula.h"
+#include "classes/libminifloat.h"
 
 #include "ExRootAnalysis/ExRootClassifier.h"
 #include "ExRootAnalysis/ExRootFilter.h"
@@ -189,6 +190,8 @@ void TreeWriter::ProcessParticles(ExRootTreeBranch *branch, TObjArray *array)
   Double_t pt, signPz, cosTheta, eta, rapidity;
 
   const Double_t c_light = 2.99792458E8;
+  const int prec = 7;
+  const int lowprec = 2;
 
   // loop over all particles
   iterator.Reset();
@@ -199,8 +202,8 @@ void TreeWriter::ProcessParticles(ExRootTreeBranch *branch, TObjArray *array)
 
     entry = static_cast<GenParticle *>(branch->NewEntry());
 
-    entry->SetBit(kIsReferenced);
-    entry->SetUniqueID(candidate->GetUniqueID());
+    // entry->SetBit(kIsReferenced);
+    // entry->SetUniqueID(candidate->GetUniqueID());
 
     pt = momentum.Pt();
     cosTheta = TMath::Abs(momentum.CosTheta());
@@ -222,21 +225,21 @@ void TreeWriter::ProcessParticles(ExRootTreeBranch *branch, TObjArray *array)
     entry->Charge = candidate->Charge;
     entry->Mass = candidate->Mass;
 
-    entry->E = momentum.E();
-    entry->Px = momentum.Px();
-    entry->Py = momentum.Py();
-    entry->Pz = momentum.Pz();
+    // entry->E = momentum.E();
+    // entry->Px = momentum.Px();
+    // entry->Py = momentum.Py();
+    // entry->Pz = momentum.Pz();
 
-    entry->Eta = eta;
-    entry->Phi = momentum.Phi();
-    entry->PT = pt;
+    entry->Eta = MiniFloatConverter::reduceMantissaToNbitsRounding(eta, prec);
+    entry->Phi = MiniFloatConverter::reduceMantissaToNbitsRounding(momentum.Phi(), prec);
+    entry->PT = MiniFloatConverter::reduceMantissaToNbitsRounding(pt, prec);
 
-    entry->Rapidity = rapidity;
+    // entry->Rapidity = rapidity;
 
-    entry->X = position.X();
-    entry->Y = position.Y();
-    entry->Z = position.Z();
-    entry->T = position.T() * 1.0E-3 / c_light;
+    // entry->X = position.X();
+    // entry->Y = position.Y();
+    // entry->Z = position.Z();
+    // entry->T = position.T() * 1.0E-3 / c_light;
   }
 }
 
@@ -249,6 +252,8 @@ void TreeWriter::ProcessVertices(ExRootTreeBranch *branch, TObjArray *array)
   Vertex *entry = 0;
 
   const Double_t c_light = 2.99792458E8;
+  const int prec = 7;
+  const int lowprec = 2;
 
   Double_t x, y, z, t, xError, yError, zError, tError, sigma, sumPT2, btvSumPT2, genDeltaZ, genSumPT2;
   UInt_t index, ndf;
@@ -286,28 +291,28 @@ void TreeWriter::ProcessVertices(ExRootTreeBranch *branch, TObjArray *array)
     entry->Index = index;
     entry->NDF = ndf;
     entry->Sigma = sigma;
-    entry->SumPT2 = sumPT2;
+    entry->SumPT2 = MiniFloatConverter::reduceMantissaToNbitsRounding(sumPT2, prec);
     entry->BTVSumPT2 = btvSumPT2;
     entry->GenDeltaZ = genDeltaZ;
-    entry->GenSumPT2 = genSumPT2;
+    entry->GenSumPT2 = MiniFloatConverter::reduceMantissaToNbitsRounding(genSumPT2, prec);
 
-    entry->X = x;
-    entry->Y = y;
-    entry->Z = z;
-    entry->T = t;
+    entry->X = MiniFloatConverter::reduceMantissaToNbitsRounding(x, prec);
+    entry->Y = MiniFloatConverter::reduceMantissaToNbitsRounding(y, prec);
+    entry->Z = MiniFloatConverter::reduceMantissaToNbitsRounding(z, prec);
+    entry->T = MiniFloatConverter::reduceMantissaToNbitsRounding(t, prec);
 
     entry->ErrorX = xError;
     entry->ErrorY = yError;
     entry->ErrorZ = zError;
     entry->ErrorT = tError;
 
-    TIter itConstituents(candidate->GetCandidates());
-    itConstituents.Reset();
-    entry->Constituents.Clear();
-    while((constituent = static_cast<Candidate *>(itConstituents.Next())))
-    {
-      entry->Constituents.Add(constituent);
-    }
+    // TIter itConstituents(candidate->GetCandidates());
+    // itConstituents.Reset();
+    // entry->Constituents.Clear();
+    // while((constituent = static_cast<Candidate *>(itConstituents.Next())))
+    // {
+    //   entry->Constituents.Add(constituent);
+    // }
   }
 }
 
@@ -477,6 +482,8 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
   ParticleFlowCandidate *entry = 0;
   Double_t e, pt, signz, cosTheta, eta, rapidity, p, ctgTheta, phi, m;
   const Double_t c_light = 2.99792458E8;
+  const int prec = 7;
+  const int lowprec = 2;
 
   // loop over all tracks
   iterator.Reset();
@@ -492,12 +499,12 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
     entry = static_cast<ParticleFlowCandidate *>(branch->NewEntry());
 
     entry->SetBit(kIsReferenced);
-    entry->SetUniqueID(candidate->GetUniqueID());
+    // entry->SetUniqueID(candidate->GetUniqueID());
 
     entry->PID = candidate->PID;
 
     entry->Charge = candidate->Charge;
-    entry->PuppiWeight = candidate->PuppiWeight;
+    entry->PuppiWeight = MiniFloatConverter::reduceMantissaToNbitsRounding(candidate->PuppiWeight, prec);
     entry->IsPU = candidate->IsPU;
     entry->IsRecoPU = candidate->IsRecoPU;
 
@@ -511,8 +518,8 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
 
     // entry->L = candidate->L;
 
-    entry->D0 = candidate->D0;
-    entry->DZ = candidate->DZ;
+    entry->D0 = MiniFloatConverter::reduceMantissaToNbitsRounding(candidate->D0, prec);
+    entry->DZ = MiniFloatConverter::reduceMantissaToNbitsRounding(candidate->DZ, prec);
     // entry->Nclusters = candidate->Nclusters;
     // entry->dNdx = candidate->dNdx;
 
@@ -523,10 +530,10 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
 
     // diagonal covariance matrix terms
 
-    entry->ErrorD0 = candidate->ErrorD0;
+    entry->ErrorD0 = MiniFloatConverter::reduceMantissaToNbitsRounding(candidate->ErrorD0, lowprec);
     // entry->ErrorC = candidate->ErrorC;
     // entry->ErrorPhi = candidate->ErrorPhi;
-    entry->ErrorDZ = candidate->ErrorDZ;
+    entry->ErrorDZ = MiniFloatConverter::reduceMantissaToNbitsRounding(candidate->ErrorDZ, lowprec);
     // entry->ErrorCtgTheta = candidate->ErrorCtgTheta;
 
     // add some offdiagonal covariance matrix elements
@@ -554,29 +561,29 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
     m = momentum.M();
     ctgTheta = (TMath::Tan(momentum.Theta()) != 0) ? 1 / TMath::Tan(momentum.Theta()) : 1e10;
 
-    entry->E = e;
-    entry->P = p;
-    entry->PT = pt;
-    entry->Eta = eta;
-    entry->Phi = phi;
-    entry->CtgTheta = ctgTheta;
-    entry->C = candidate->C;
-    entry->Mass = m;
+    // entry->E = e;
+    // entry->P = p;
+    entry->PT = MiniFloatConverter::reduceMantissaToNbitsRounding(pt, prec);
+    entry->Eta = MiniFloatConverter::reduceMantissaToNbitsRounding(eta, prec);
+    entry->Phi = MiniFloatConverter::reduceMantissaToNbitsRounding(phi, prec);
+    // entry->CtgTheta = ctgTheta;
+    // entry->C = candidate->C;
+    // entry->Mass = MiniFloatConverter::reduceMantissaToNbitsRounding(m, lowprec);
 
     particle = static_cast<Candidate *>(candidate->GetCandidates()->At(0));
     //const TLorentzVector &initialPosition = particle->Position;
     const TLorentzVector &initialPosition = candidate->InitialPosition;
 
-    entry->X = initialPosition.X();
-    entry->Y = initialPosition.Y();
-    entry->Z = initialPosition.Z();
-    entry->T = initialPosition.T() * 1.0E-3 / c_light;
-    entry->ErrorT = candidate-> ErrorT * 1.0E-3 / c_light;
+    // entry->X = initialPosition.X();
+    // entry->Y = initialPosition.Y();
+    // entry->Z = initialPosition.Z();
+    // entry->T = initialPosition.T() * 1.0E-3 / c_light;
+    // entry->ErrorT = candidate-> ErrorT * 1.0E-3 / c_light;
 
     entry->VertexIndex = candidate->ClusterIndex;
 
-    entry->Eem = candidate->Eem;
-    entry->Ehad = candidate->Ehad;
+    entry->Eem = MiniFloatConverter::reduceMantissaToNbitsRounding(candidate->Eem/e, prec);
+    // entry->Ehad = MiniFloatConverter::reduceMantissaToNbitsRounding(candidate->Ehad, lowprec);
     // entry->Edges[0] = candidate->Edges[0];
     // entry->Edges[1] = candidate->Edges[1];
     // entry->Edges[2] = candidate->Edges[2];
@@ -585,7 +592,7 @@ void TreeWriter::ProcessParticleFlowCandidates(ExRootTreeBranch *branch, TObjArr
     //entry->T = position.T() * 1.0E-3 / c_light;
     entry->NTimeHits = candidate->NTimeHits;
 
-    FillParticles(candidate, &entry->Particles);
+    // FillParticles(candidate, &entry->Particles);
 
   }
 }
