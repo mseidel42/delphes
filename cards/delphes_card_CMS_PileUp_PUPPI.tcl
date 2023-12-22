@@ -70,7 +70,7 @@ set ExecutionPath {
 # PileUp Merger
 ###############
 
-module PileUpMerger PileUpMerger {
+module PileUpMerger PileUpMergerFromFile {
   set InputArray Delphes/stableParticles
 
   set ParticleOutputArray stableParticles
@@ -78,6 +78,33 @@ module PileUpMerger PileUpMerger {
 
   # pre-generated minbias input file
   set PileUpFile MinBias.pileup
+
+  # distribution: 0=poisson, 1=flat, 2=fixed
+  set PileUpDistribution 1
+
+  # average expected pile up
+  set MeanPileUp 50
+
+   # maximum spread in the beam direction in m
+  set ZVertexSpread 0.25
+
+  # maximum spread in time in s
+  set TVertexSpread 800E-12
+
+  # vertex smearing formula f(z,t) (z,t need to be respectively given in m,s)
+  set VertexDistributionFormula {exp(-(t^2/160e-12^2/2))*exp(-(z^2/0.053^2/2))}
+
+
+}
+
+module PileUpMergerPythia8 PileUpMerger {
+  set InputArray Delphes/stableParticles
+
+  set ParticleOutputArray stableParticles
+  set VertexOutputArray vertices
+
+  # pre-generated minbias input file
+  set ConfigFile /afs/cern.ch/work/m/mseidel/WRecoil/delphes/examples/Pythia8/generatePileUpCP5.cmnd
 
   # distribution: 0=poisson, 1=flat, 2=fixed
   set PileUpDistribution 1

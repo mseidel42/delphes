@@ -2,9 +2,12 @@
 ! Names are case-insensitive  -  but spellings-sensitive!
 ! The changes here are illustrative, not always physics-motivated.
 
+SoftQCD:inelastic = on
+BeamRemnants:primordialKThard = 2.481
+
 ! 1) Settings that will be used in a main program.
-Main:numberOfEvents = 100000          ! number of events to generate
-Main:timesAllowErrors = 3          ! abort run after this many flawed events
+Main:numberOfEvents = 10000000          ! number of events to generate
+Main:timesAllowErrors = 10000          ! abort run after this many flawed events
 
 ! 2) Settings related to output in init(), next() and stat().
 Init:showChangedSettings = on      ! list changed settings
@@ -18,7 +21,7 @@ Next:numberShowProcess = 1         ! print process record n times
 Next:numberShowEvent = 1           ! print event record n times
 Stat:showPartonLevel = on          ! additional statistics on MPI
 Random:setSeed = on
-Random:setSeed = 10
+Random:setSeed = 0
 
 ! 3) Beam parameter settings. Values below agree with default ones.
 Beams:idA = 2212                   ! first beam, p = 2212, pbar = -2212
